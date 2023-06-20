@@ -1,0 +1,46 @@
+import discord
+import random
+
+
+
+
+def gen_pass(pass_length):
+    elements = "+-/*!&$#?=@<>"
+    password = ""
+
+    for i in range(pass_length):
+        password += random.choice(elements)
+
+    return password
+
+# ayricaliklar (intents) değişkeni botun ayrıcalıklarını depolayacak
+intents = discord.Intents.default()
+# Mesajları okuma ayrıcalığını etkinleştirelim
+intents.message_content = True
+# istemci (client) değişkeniyle bir bot oluşturalım ve ayrıcalıkları ona aktaralım
+client = discord.Client(intents=intents)
+
+@client.event
+async def on_ready():
+    print(f'hazır {client.user}')
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+    elif message.content.startswith('şifre oluştur'):
+        password = gen_pass(10)
+        await message.channel.send(password)
+    elif message.content.startswith('bye'):
+        await message.channel.send("ben kaçtım")
+    elif message.content.startswith('yazı tura'):
+        sayi=random.randint(1,2)
+        if sayi == 1:
+            await message.channel.send('yazı')
+        else:
+            await message.channel.send('tura')
+    elif message.content.startswith('hello'):
+        await message.channel.send("as")
+    elif message.content.startswith('rodri is on fire'):
+        await message.channel.send("your defence is terrified")
+client.run("token")
